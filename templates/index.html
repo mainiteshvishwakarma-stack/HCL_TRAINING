@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Billing System</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🍽 Restaurant Billing System</h1>
+    <p class="subtitle">Welcome to Our Restaurant</p>
+
+    <form method="POST">
+
+        <h2>Our Menu</h2>
+
+        <div class="menu">
+
+            {% for item, price in menu.items() %}
+
+            <div class="menu-item">
+
+                <div>
+                    <h3>{{ item }}</h3>
+                    <p>₹{{ price }}</p>
+                </div>
+
+                <input
+                    type="number"
+                    name="{{ item }}"
+                    min="0"
+                    value="0"
+                    placeholder="Quantity"
+                >
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <button type="submit">Generate Bill</button>
+
+    </form>
+
+    {% if bill_items %}
+
+    <div class="bill">
+
+        <h2>Customer Bill</h2>
+
+        <p>Date: {{ "" }}</p>
+
+        <table>
+
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+
+            {% for item in bill_items %}
+
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>₹{{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹{{ "%.2f"|format(item.total) }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        <div class="total">
+
+            <p>Subtotal:
+                ₹{{ "%.2f"|format(subtotal) }}
+            </p>
+
+            <p>GST (5%):
+                ₹{{ "%.2f"|format(gst) }}
+            </p>
+
+            <h2>Grand Total:
+                ₹{{ "%.2f"|format(grand_total) }}
+            </h2>
+
+        </div>
+
+        <button onclick="window.print()" class="print-btn">
+            Print Bill
+        </button>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
